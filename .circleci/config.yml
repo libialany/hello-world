@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update && sudo apt-get install -y cowsay
-      - run: cowsay I Love Dogs!!    
+      - run: cowsay I_Love_Dogs    
 workflows:
   cow-app-workflow:
     jobs:
