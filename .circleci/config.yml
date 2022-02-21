@@ -1,11 +1,11 @@
 
 version: 2.1
 jobs:
-  cow-app:
+  build:
     docker:
       - image: cimg/base:2020.01
     steps:
       - checkout
       - run: sudo apt-get update && sudo apt-get install -y cowsay
-      - run: cowsay I_Love_Dogs    
+      - run: cowsay Continuous Integration Rocks!   
 
