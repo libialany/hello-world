@@ -1,36 +1,29 @@
 version: 2.1
-jobs: 
-  build:
+orbs: 
+  docker: circleci/docker@1.5.0
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: mellib/docker-node-app
     docker:
-      - image: circleci/node:4.8.2
-    resource_class: large
-    steps:
+      - image: circleci/node:latest 
+        auth:
+          username: $DOCKERHUB_USERNAME 
+          password: $DOCKERHUB_PASSWORD
+jobs:
+  publish-latest-hub:
+    executor: docker-publisher
+    steps: 
       - checkout
-      - run: 
-        name: The First Step
-        command: |
-          echo "HI MELANY"
-          echo "STEP 1"
+      - setup_remote_docker
       - run:
-        name: Running TEst
-        command: |
-          node -v 
-          echo "STEP 2"
-  package:
-    docker: 
-      - image: circleci/node:4.8.2
-    steps:
-      - checkout
-      - run:
-        name: Success
-        command: |
-          echo "Success"
+          name: Published-Docker-Image-to-Docker-Hub
+          command: | 
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin 
+            docker build -t $IMAGE_NAME . 
+            docker push $IMAGE_NAME:latest
 workflows:
   version: 2
-  Build-package:
-    jobs:
-      - build
-      - package
-        requires:
-          - build
-
+  build-master:
+    jobs: 
+      - publish-latest-hub
