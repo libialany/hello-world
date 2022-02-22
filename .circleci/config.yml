@@ -3,13 +3,34 @@ jobs:
   build:
     docker:
       - image: circleci/node:4.8.2
+    resource_class: large
     steps:
       - checkout
-      - run: echo "I'M excited"
+      - run: 
+        name: The First Step
+        command: |
+          echo "HI MELANY"
+          echo "STEP 1"
+      - run:
+        name: Running TEst
+        command: |
+          node -v 
+          echo "STEP 2"
+  package:
+    docker: 
+      - image: circleci/node:4.8.2
+    steps:
+      - checkout
+      - run:
+        name: Success
+        command: |
+          echo "Success"
 workflows:
   version: 2
-  build: 
+  Build-package:
     jobs:
-      - welcome/run
       - build
-      
+      - package
+        requires:
+          - build
+
